@@ -4,12 +4,13 @@ import { AppService } from './app.service';
 import { ArtistsController } from './artists/artists.controller';
 import { AlbumsController } from './albums/albums.controller';
 import { TracksController } from './tracks/tracks.controller';
-import * as mongoose from 'mongoose';
 import { MongooseModule } from '@nestjs/mongoose';
+import { Artist, ArtistsSchema } from './schemas/artists.schema';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost/spotify-nest'),
+    MongooseModule.forRoot('mongodb://localhost/spotify'),
+    MongooseModule.forFeature([{ name: Artist.name, schema: ArtistsSchema }]),
   ],
   controllers: [
     AppController,
