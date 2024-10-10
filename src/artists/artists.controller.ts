@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -42,5 +43,15 @@ export class ArtistsController {
       description: artistDto.description,
       image: uploadedFile ? '/images/artists/' + uploadedFile.filename : null,
     });
+  }
+
+  @Delete(':id')
+  async delete(@Param('id') id: string) {
+    const artists = await this.artistModel.findById(id);
+    if (artists) {
+      await this.artistModel.deleteOne({ _id: id });
+      return { message: 'Artists deleted successfully.', };
+    }
+    return { message: 'Artists not Found' };
   }
 }
