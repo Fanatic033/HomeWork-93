@@ -50,7 +50,7 @@ export class ArtistsController {
     const artists = await this.artistModel.findById(id);
     if (artists) {
       await this.artistModel.deleteOne({ _id: id });
-      return { message: 'Artists deleted successfully.', };
+      return { message: 'Artists deleted successfully.' };
     }
     return { message: 'Artists not Found' };
   }
