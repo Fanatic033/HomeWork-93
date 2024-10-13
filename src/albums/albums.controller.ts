@@ -42,7 +42,6 @@ export class AlbumsController {
     @Body() albumDto: CreateAlbumDto,
   ) {
     try {
-      console.log(albumDto);
       return await this.albumModel.create({
         title: albumDto.title,
         artist: albumDto.artist,
