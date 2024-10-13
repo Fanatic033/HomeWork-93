@@ -5,7 +5,12 @@ import * as bcrypt from 'bcrypt';
 
 const SALT_WORK_FACTOR = 10;
 
-export type UserDocument = User & Document;
+export interface UserMethods {
+  checkPassword: (password: string) => Promise<boolean>;
+  generateToken: () => void;
+}
+
+export type UserDocument = User & Document & UserMethods;
 
 @Schema()
 export class User {
@@ -27,10 +32,6 @@ export class User {
 
   @Prop({ required: true, default: 'user', enum: ['user', 'admin'] })
   role: string;
-
-  checkPassword: (password: string) => Promise<boolean>;
-
-  generateToken: () => void;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
@@ -39,7 +40,7 @@ UserSchema.methods.generateToken = function () {
   this.token = crypto.randomUUID();
 };
 
-UserSchema.methods.checkPassword = function (password) {
+UserSchema.methods.checkPassword = function (password: string) {
   return bcrypt.compare(password, this.password);
 };
 
@@ -52,7 +53,7 @@ UserSchema.pre<UserDocument>('save', async function () {
 });
 
 UserSchema.set('toJSON', {
-  transform: (doc, ret) => {
+  transform: (_doc, ret) => {
     delete ret.password;
     return ret;
   },
