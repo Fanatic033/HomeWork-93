@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Delete,
   HttpException,
@@ -13,17 +14,18 @@ import { Model } from 'mongoose';
 import { Request } from 'express';
 import { User, UserDocument } from '../schemas/users.schema';
 import { AuthGuard } from '@nestjs/passport';
+import { CreateUserDto } from './create-users.dto';
 
 @Controller('users')
 export class UsersController {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
   @Post()
-  registerUser(@Req() req: Request) {
+  async registerUser(@Body() userDto: CreateUserDto) {
     const user = new this.userModel({
-      email: req.body.email,
-      password: req.body.password,
-      displayName: req.body.displayName,
+      email: userDto.email,
+      password: userDto.password,
+      displayName: userDto.displayName,
     });
     user.generateToken();
     return user.save();
