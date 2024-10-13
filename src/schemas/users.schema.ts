@@ -30,7 +30,7 @@ export class User {
   @Prop()
   displayName: string;
 
-  @Prop({ required: true, default: 'admin', enum: ['user', 'admin'] })
+  @Prop({ required: true, default: 'user', enum: ['user', 'admin'] })
   role: string;
 }
 
